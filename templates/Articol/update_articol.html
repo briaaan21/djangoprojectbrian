@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block title %}Update Article #{{ article.id }}{% endblock %}
+
+{% block content %}
+<style>
+  body {
+    background: linear-gradient(135deg, #7b5acf, #b084f5);
+    color: #fff;
+    overflow-x: hidden;
+  }
+
+  .form-card {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid #a88cef;
+    border-radius: 1rem;
+    box-shadow: 0 0 30px rgba(123, 90, 207, 0.5);
+    padding: 2rem;
+    animation: fadeInUp 1s ease forwards;
+  }
+
+  .btn-join {
+    border: 2px solid #d4bfff;
+    color: #d4bfff;
+    transition: 0.3s ease;
+  }
+
+  .btn-join:hover {
+    background-color: #6f42c1;
+    color: white;
+  }
+
+  label {
+    font-weight: 500;
+  }
+
+  .particles {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .particle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    filter: drop-shadow(0 0 3px rgba(255,255,255,0.5));
+    animation: floatUp 25s linear infinite, twinkle 4s ease-in-out infinite;
+    opacity: 0.8;
+  }
+
+  @keyframes floatUp {
+    0% { transform: translateY(100vh); opacity: 0; }
+    10% { opacity: 0.6; }
+    100% { transform: translateY(-10vh); opacity: 0; }
+  }
+
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+  }
+
+  @keyframes fadeInUp {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+</style>
+
+<div class="particles" aria-hidden="true">
+  <div class="particle" style="width: 15px; height: 15px; left: 10%; animation-delay: 0s, 0s;"></div>
+  <div class="particle" style="width: 10px; height: 10px; left: 40%; animation-delay: 3s, 1s;"></div>
+  <div class="particle" style="width: 20px; height: 20px; left: 70%; animation-delay: 7s, 2s;"></div>
+</div>
+
+<div class="container mt-5 position-relative" style="z-index: 1;">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="form-card">
+        <h2 class="text-center fw-bold mb-4">Update Article: {{ article.title }}</h2>
+        <form method="POST">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label class="form-label">Original Title</label>
+            <input type="text" class="form-control bg-dark text-light border-0" value="{{ article.title }}" disabled>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Original Content</label>
+            <textarea class="form-control bg-dark text-light border-0" rows="3" disabled>{{ article.content }}</textarea>
+          </div>
+          {{ form.as_p }}
+          <div class="text-center mt-4">
+            <button type="submit" class="btn btn-join me-2 px-4">Update</button>
+            <a href="{% url 'list-articol' %}" class="btn btn-outline-light px-4">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

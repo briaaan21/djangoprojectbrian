@@ -1,0 +1,179 @@
+{% extends 'base.html' %}
+
+{% block title %}BlogTube - Home{% endblock %}
+
+{% block content %}
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #7b5acf, #b084f5);
+    color: #eee;
+    overflow-x: hidden;
+  }
+
+  .particles {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .particle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255 255 255 / 0.15);
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    opacity: 0.7;
+    filter: drop-shadow(0 0 4px rgba(255 255 255 / 0.6));
+  }
+  @keyframes floatUp {
+    0% { transform: translateY(100vh) scale(1); opacity: 0; }
+    10% { opacity: 0.6; }
+    100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+  }
+
+  .container {
+    max-width: 1000px;
+    margin: 80px auto 60px;
+    padding: 0 20px;
+    position: relative;
+    z-index: 2;
+  }
+
+
+  .main-card {
+    background: linear-gradient(145deg, #a890f7, #6546b0);
+    border-radius: 1.2rem;
+    padding: 40px 40px 50px;
+    box-shadow:
+      0 0 40px #c5a6ff,
+      0 0 80px #8c54e1,
+      inset 0 0 80px #a77fff;
+    text-align: center;
+    color: #f0e8ff;
+    user-select: none;
+    transition: box-shadow 0.4s ease;
+  }
+  .main-card:hover {
+    box-shadow:
+      0 0 60px #d8bbff,
+      0 0 120px #a166ff,
+      inset 0 0 100px #b491ff;
+  }
+  .main-card h1 {
+    font-size: 3.8rem;
+    font-weight: 800;
+    margin-bottom: 0.4em;
+    letter-spacing: 0.05em;
+    text-shadow:
+      0 0 10px #d9bbff,
+      0 0 20px #a07fff,
+      0 0 40px #c6a5ff;
+  }
+  .main-card p.lead {
+    font-size: 1.3rem;
+    font-weight: 600;
+    line-height: 1.5;
+    max-width: 720px;
+    margin: 0 auto;
+    text-shadow: 0 0 8px #c4a9ff88;
+  }
+
+
+  .secondary-cards {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 50px;
+    flex-wrap: wrap;
+  }
+
+
+  .card-secondary {
+    background: linear-gradient(135deg, #9d80e5, #5f3da1);
+    border-radius: 1rem;
+    padding: 25px 30px;
+    width: 320px;
+    box-shadow:
+      0 0 20px #8c68e3,
+      0 0 40px #5f3ea3;
+    color: #eee;
+    cursor: default;
+    transition:
+      box-shadow 0.3s ease,
+      transform 0.3s ease;
+  }
+  .card-secondary:hover {
+    box-shadow:
+      0 0 40px #bb99ff,
+      0 0 80px #7b59c1;
+    transform: scale(1.07);
+  }
+  .card-secondary h3 {
+    font-weight: 700;
+    font-size: 1.6rem;
+    margin-bottom: 0.5em;
+    text-shadow:
+      0 0 12px #b18eff;
+  }
+  .card-secondary p {
+    font-weight: 500;
+    font-size: 1.05rem;
+    line-height: 1.5;
+    color: #d3c9ffcc;
+    text-shadow: 0 0 6px #a996d3;
+  }
+
+
+  @media (max-width: 720px) {
+    .main-card h1 {
+      font-size: 2.8rem;
+    }
+    .main-card p.lead {
+      font-size: 1.1rem;
+      max-width: 100%;
+    }
+    .secondary-cards {
+      gap: 30px;
+    }
+    .card-secondary {
+      width: 100%;
+      max-width: 100%;
+    }
+  }
+</style>
+
+<div class="particles" aria-hidden="true">
+  <div class="particle" style="width: 18px; height: 18px; left: 12%; animation: floatUp 30s linear infinite; animation-delay: 0s;"></div>
+  <div class="particle" style="width: 10px; height: 10px; left: 25%; animation: floatUp 27s linear infinite; animation-delay: 8s;"></div>
+  <div class="particle" style="width: 22px; height: 22px; left: 40%; animation: floatUp 33s linear infinite; animation-delay: 4s;"></div>
+  <div class="particle" style="width: 14px; height: 14px; left: 60%; animation: floatUp 35s linear infinite; animation-delay: 10s;"></div>
+  <div class="particle" style="width: 16px; height: 16px; left: 75%; animation: floatUp 28s linear infinite; animation-delay: 3s;"></div>
+  <div class="particle" style="width: 9px; height: 9px; left: 85%; animation: floatUp 25s linear infinite; animation-delay: 6s;"></div>
+</div>
+
+<div class="container" role="main" aria-label="Homepage main content">
+
+  <section class="main-card" aria-label="Welcome to BlogTube main card">
+    <h1>Welcome to BlogTube!</h1>
+    <p class="lead"><strong>BlogTube is the greatest website for sharing your experience and getting in touch with other people.</strong></p>
+  </section>
+
+  <section class="secondary-cards" aria-label="Additional information cards">
+    <article class="card-secondary" aria-labelledby="share-title">
+      <h3 id="share-title">Share your experience</h3>
+      <p>BlogTube helps you share your experience with others.</p>
+    </article>
+
+    <article class="card-secondary" aria-labelledby="watch-title">
+      <h3 id="watch-title">Watch and Comment</h3>
+      <p>With BlogTube you can see others' experiences and write comments.</p>
+    </article>
+  </section>
+
+</div>
+{% endblock %}

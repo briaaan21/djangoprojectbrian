@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block title %}Delete Article #{{ article.id }}{% endblock %}
+
+{% block content %}
+<style>
+  body {
+    background: linear-gradient(135deg, #7b5acf, #b084f5);
+    color: #fff;
+    overflow-x: hidden;
+  }
+
+  .delete-card {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid #a88cef;
+    border-radius: 1rem;
+    box-shadow: 0 0 30px rgba(123, 90, 207, 0.5);
+    padding: 2rem;
+    animation: fadeInUp 1s ease forwards;
+  }
+
+  .btn-danger {
+    background-color: #dc3545;
+    border: none;
+  }
+
+  .btn-danger:hover {
+    background-color: #bb2d3b;
+  }
+
+  .btn-outline-light:hover {
+    background-color: #d4bfff;
+    color: #000;
+  }
+
+  .particles {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .particle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    animation: floatUp 25s linear infinite, twinkle 4s ease-in-out infinite;
+    filter: drop-shadow(0 0 3px rgba(255,255,255,0.5));
+  }
+
+  @keyframes floatUp {
+    0% { transform: translateY(100vh); opacity: 0; }
+    10% { opacity: 0.6; }
+    100% { transform: translateY(-10vh); opacity: 0; }
+  }
+
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+  }
+
+  @keyframes fadeInUp {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+</style>
+
+<div class="particles" aria-hidden="true">
+  <div class="particle" style="width: 15px; height: 15px; left: 20%; animation-delay: 0s, 0s;"></div>
+  <div class="particle" style="width: 10px; height: 10px; left: 50%; animation-delay: 3s, 1s;"></div>
+  <div class="particle" style="width: 20px; height: 20px; left: 75%; animation-delay: 6s, 2s;"></div>
+</div>
+
+<div class="container d-flex justify-content-center align-items-center min-vh-100 position-relative" style="z-index: 1;">
+  <div class="delete-card text-white">
+    <div class="text-center mb-4">
+      <i class="fas fa-exclamation-triangle fa-3x mb-3" style="color: #ffc107;"></i>
+      <h2 class="fw-bold">Are you sure you want to delete this article?</h2>
+    </div>
+
+    <div class="bg-dark rounded-3 p-3 mb-4 text-light">
+      <p><strong>Title:</strong> {{ article.title }}</p>
+      <p><strong>Content:</strong> {{ article.content }}</p>
+      <p><strong>Date:</strong> {{ article.date_published|date:"d-m-Y" }}</p>
+    </div>
+
+    <form method="POST" class="text-center mt-4">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-danger px-4 me-2">Yes, Delete</button>
+      <a href="{% url 'list-articol' %}" class="btn btn-outline-light px-4">Cancel</a>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,251 @@
+<nav class="navbar navbar-expand-lg navbar-dark navbar-custom shadow-sm">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center fw-bold" href="{% url 'home' %}">
+      <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#d4bfff" class="bi bi-camera-reels me-2 rotating-logo" viewBox="0 0 16 16">
+        <path d="M0 8a4 4 0 1 1 8 0 4 4 0 0 1-8 0z"/>
+        <path d="M11.5 0a1 1 0 0 1 1 1v6.293l3.146-3.147a.5.5 0 0 1 .708.708L13.707 8l2.647 2.646a.5.5 0 0 1-.708.708L12.5 8.707V15a1 1 0 0 1-1 1h-1v-3.5a.5.5 0 0 0-.5-.5H8v-1h2v-1H8v-1h3.5a.5.5 0 0 0 .5-.5V1a1 1 0 0 1 1-1z"/>
+      </svg>
+      <span class="brand-text">BlogTube</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+      aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarContent">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
+        <li class="nav-item">
+          <a class="nav-link text-white px-3 bouncing-link" href="{% url 'home' %}">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white px-3 bouncing-link" href="{% url 'list-articol' %}">Articles</a>
+        </li>
+        {% if user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link text-white px-3 bouncing-link" href="{% url 'create-articol' %}">Create Post</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle text-white px-3 bouncing-link" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              {{ user.username }}
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown" style="background: #7b5acf; border:none;">
+              <li><a class="dropdown-item text-white" href="#">To come</a></li>
+              <li><hr class="dropdown-divider" style="border-color: #d4bfff;"></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <form method="post" action="{% url 'logout' %}" style="margin: 0;">
+              {% csrf_token %}
+              <button type="submit" class="nav-link btn btn-link text-white px-3 logout-btn" style="padding: 0; margin-left: 1rem; text-decoration: none;">
+                Logout
+              </button>
+            </form>
+          </li>
+        {% else %}
+          <li class="nav-item">
+            <a class="nav-link btn btn-outline-light ms-2 px-3 rounded shimmer-btn" href="{% url 'login' %}">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link btn btn-light text-purple ms-2 px-3 rounded shimmer-btn" href="{% url 'create-user' %}" style="color:#6f42c1;">Sign Up</a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<style>
+
+  .navbar-custom {
+    background: linear-gradient(135deg, #6f42c1, #b084f5);
+    box-shadow: 0 4px 12px rgba(111, 66, 193, 0.6);
+    font-family: 'Poppins', sans-serif;
+  }
+
+
+  .navbar-brand {
+    perspective: 900px;
+    position: relative;
+    overflow: visible;
+  }
+
+
+  .brand-text {
+    font-size: 1.9rem;
+    font-weight: 900;
+    color: #d4bfff;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    display: inline-block;
+    animation: rotateNeon 8s linear infinite;
+    text-shadow:
+      0 0 6px #b084f5,
+      0 0 12px #6f42c1,
+      0 0 18px #b084f5,
+      0 0 24px #6f42c1;
+    transform-style: preserve-3d;
+    position: relative;
+  }
+
+
+  .brand-text::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.6), transparent);
+    transform: skewX(-25deg);
+    animation: shine 3.5s linear infinite;
+    pointer-events: none;
+    border-radius: 3px;
+  }
+
+
+  .rotating-logo {
+    animation: rotateNeon 6s linear infinite;
+    transform-origin: center center;
+    transform-style: preserve-3d;
+    filter: drop-shadow(0 0 6px #b084f5) drop-shadow(0 0 12px #6f42c1);
+  }
+
+
+  @keyframes rotateNeon {
+    0% {
+      transform: rotateY(0deg);
+      color: #d4bfff;
+      text-shadow:
+        0 0 6px #b084f5,
+        0 0 12px #6f42c1,
+        0 0 18px #b084f5,
+        0 0 24px #6f42c1;
+    }
+    50% {
+      color: #b084f5;
+      text-shadow:
+        0 0 10px #d7c1ff,
+        0 0 20px #9b77f5,
+        0 0 30px #b084f5,
+        0 0 40px #6f42c1;
+    }
+    100% {
+      transform: rotateY(360deg);
+      color: #d4bfff;
+      text-shadow:
+        0 0 6px #b084f5,
+        0 0 12px #6f42c1,
+        0 0 18px #b084f5,
+        0 0 24px #6f42c1;
+    }
+  }
+
+
+  @keyframes shine {
+    0% {
+      left: -100%;
+    }
+    100% {
+      left: 100%;
+    }
+  }
+
+
+  .nav-link {
+    font-weight: 600;
+    font-size: 1.05rem;
+    transition: color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    z-index: 10;
+  }
+
+
+  .bouncing-link:hover {
+    animation: bounceGlow 0.6s;
+    color: #fff8ff !important;
+    background-color: rgba(255, 255, 255, 0.12);
+    border-radius: 0.3rem;
+    box-shadow:
+      0 0 8px #b084f5,
+      0 0 14px #6f42c1,
+      0 0 24px #d4bfff;
+    transform: scale(1.1);
+    text-shadow:
+      0 0 6px #b084f5,
+      0 0 12px #6f42c1;
+  }
+
+  @keyframes bounceGlow {
+    0%, 100% {
+      transform: translateY(0) scale(1);
+      box-shadow:
+        0 0 6px #6f42c1;
+    }
+    50% {
+      transform: translateY(-8px) scale(1.1);
+      box-shadow:
+        0 0 20px #b084f5,
+        0 0 30px #6f42c1,
+        0 0 40px #d4bfff;
+    }
+  }
+
+
+  .btn-link.logout-btn {
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: #e0d7f5;
+    transition: text-decoration 0.3s ease, color 0.3s ease;
+  }
+
+  .btn-link.logout-btn:hover {
+    text-decoration: underline;
+    color: #fff;
+  }
+
+
+  .shimmer-btn {
+    position: relative;
+    overflow: hidden;
+    font-weight: 600;
+  }
+
+  .shimmer-btn::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -150%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.7), transparent);
+    transform: skewX(-25deg);
+    transition: none;
+  }
+
+  .shimmer-btn:hover::before {
+    animation: shimmer 2s infinite;
+  }
+
+  @keyframes shimmer {
+    0% {
+      left: -150%;
+    }
+    100% {
+      left: 150%;
+    }
+  }
+
+
+  .btn-outline-light {
+    border-width: 2px;
+  }
+
+  .btn-light.text-purple {
+    background-color: #f5f0ff;
+    transition: background-color 0.3s ease;
+  }
+
+  .btn-light.text-purple:hover {
+    background-color: #6f42c1;
+    color: white !important;
+  }
+</style>

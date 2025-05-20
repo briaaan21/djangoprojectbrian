@@ -1,0 +1,316 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ article.title }}{% endblock %}
+
+{% block content %}
+{% load widget_tweaks %}
+<style>
+  body {
+    background: linear-gradient(135deg, #6f42c1, #9b59b6);
+    overflow-x: hidden;
+  }
+
+  .particles {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .particle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    animation: float 30s linear infinite, twinkle 5s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0% { transform: translateY(100vh); }
+    100% { transform: translateY(-10vh); }
+  }
+
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+  }
+
+  .glass-card {
+    background: rgba(255, 255, 255, 0.07);
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+    animation: fadeInUp 1s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  }
+  .glass-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 40px rgba(111, 66, 193, 0.6);
+    border-color: rgba(196, 155, 211, 0.5);
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .comment-avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: #fff;
+    color: #6f42c1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.1rem;
+    margin-right: 1rem;
+    box-shadow: 0 0 10px rgba(111, 66, 193, 0.5);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .comment-avatar:hover {
+    transform: scale(1.15);
+    box-shadow: 0 0 20px rgba(196, 155, 211, 0.8);
+  }
+
+  .comment-box {
+    background-color: rgba(255, 255, 255, 0.08);
+    border-left: 4px solid #d2b6ff;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    margin-bottom: 1rem;
+    color: #fff;
+    animation: fadeIn 0.8s ease-in;
+  }
+
+  @keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+  }
+
+  .btn-purple {
+    background: #9b59b6;
+    color: white;
+    border: none;
+    transition: all 0.3s ease;
+  }
+  .btn-purple:hover {
+    background: #8e44ad;
+    box-shadow: 0 0 10px #c39bd3;
+  }
+
+  .form-control {
+    background: rgba(255,255,255,0.05);
+    color: #fff;
+    border: 1px solid #ccc;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .form-control:focus {
+    border-color: #d4bfff;
+    box-shadow: 0 0 0 0.2rem rgba(212, 191, 255, 0.25);
+  }
+
+  .emoji-button {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #fff;
+    margin-left: 5px;
+    transition: transform 0.3s ease;
+  }
+  .emoji-button:hover {
+    transform: scale(1.3);
+  }
+  .emoji-button[aria-expanded="true"] {
+    transform: scale(1.5);
+    color: #d4bfff;
+  }
+
+  .comment-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #dcdcdc;
+    margin-bottom: 0.5rem;
+  }
+
+  .avatar-stack img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-left: -10px;
+    border: 2px solid white;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .avatar-stack img:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 15px rgba(196, 155, 211, 0.9);
+    z-index: 10;
+  }
+
+  .reaction-btn {
+    background: transparent;
+    border: none;
+    font-size: 1.25rem;
+    margin-right: 10px;
+    cursor: pointer;
+    transition: transform 0.3s ease, filter 0.3s ease;
+  }
+  .reaction-btn.active {
+    animation: pulse 1.2s infinite;
+    transform: scale(1.3);
+    filter: drop-shadow(0 0 8px #fff);
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1.3); filter: drop-shadow(0 0 8px #fff);}
+    50% { transform: scale(1.4); filter: drop-shadow(0 0 12px #d4bfff);}
+  }
+
+  h2 {
+    text-shadow: 0 0 6px rgba(212, 191, 255, 0.7);
+    transition: text-shadow 0.3s ease;
+  }
+  h2:hover {
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.9);
+  }
+
+</style>
+
+<div class="particles">
+  {% for i in "1234567890"|make_list %}
+  <div class="particle" style="
+    width: {{ 8|add:forloop.counter0 }}px;
+    height: {{ 8|add:forloop.counter0 }}px;
+    left: {{ forloop.counter0|add:"10"|add:forloop.counter0|stringformat:"d" }}%;
+    animation-delay: {{ forloop.counter0 }}s;
+  "></div>
+  {% endfor %}
+</div>
+
+<div class="container py-5 position-relative" style="z-index: 1;">
+  <div class="row justify-content-center">
+    <div class="col-lg-10 col-xl-8">
+
+
+      <div class="glass-card mb-4">
+
+        <img src="{{ article.image.url }}" alt="{{ article.title }}"
+            style="max-width: 100%; border-radius: 1rem; margin-bottom: 1rem;">
+
+        <h2>{{ article.title }}</h2>
+        <div class="comment-header">
+          <div>
+            <small>by <strong>{{ article.author.username }}</strong> on {{ article.date_published|date:"d M Y" }}</small>
+          </div>
+          <div class="avatar-stack d-flex">
+            {% for item in comment_data|slice:":5" %}
+              <img src="https://api.dicebear.com/7.x/initials/svg?seed={{ item.comment.user.username }}" alt="avatar">
+            {% endfor %}
+          </div>
+        </div>
+        <p class="mt-3 fs-5">{{ article.content }}</p>
+        <hr>
+        <small class="text-muted">Last updated: {{ article.updated_at|date:"d M Y" }}</small>
+      </div>
+
+
+      <div class="glass-card">
+        <h4 class="mb-3">Comments ({{ comment_data|length }})</h4>
+
+        {% if comment_data %}
+          {% for item in comment_data %}
+          <div class="comment-box d-flex">
+            <div class="comment-avatar">{{ item.comment.user.username|slice:":1"|upper }}</div>
+            <div class="flex-grow-1">
+              <strong>{{ item.comment.user.username }}</strong>
+              <p class="mb-1">{{ item.comment.content }}</p>
+              <small class="text-muted">{{ item.comment.date_posted|date:"d M Y H:i" }}</small>
+
+              {% if user.is_authenticated %}
+              <div class="mt-2">
+                <form method="post" action="{% url 'add-reaction' item.comment.id 'like' %}" style="display:inline;">
+                  {% csrf_token %}
+                  <button type="submit" class="reaction-btn {% if 'like' in item.user_reactions %}active{% endif %}">👍 {{ item.reactions_count.like|default:0 }}</button>
+                </form>
+                <form method="post" action="{% url 'add-reaction' item.comment.id 'dislike' %}" style="display:inline;">
+                  {% csrf_token %}
+                  <button type="submit" class="reaction-btn {% if 'dislike' in item.user_reactions %}active{% endif %}">👎 {{ item.reactions_count.dislike|default:0 }}</button>
+                </form>
+                <form method="post" action="{% url 'add-reaction' item.comment.id 'love' %}" style="display:inline;">
+                  {% csrf_token %}
+                  <button type="submit" class="reaction-btn {% if 'love' in item.user_reactions %}active{% endif %}">❤️ {{ item.reactions_count.love|default:0 }}</button>
+                </form>
+                <form method="post" action="{% url 'add-reaction' item.comment.id 'laugh' %}" style="display:inline;">
+                  {% csrf_token %}
+                  <button type="submit" class="reaction-btn {% if 'laugh' in item.user_reactions %}active{% endif %}">😂 {{ item.reactions_count.laugh|default:0 }}</button>
+                </form>
+              </div>
+              {% endif %}
+            </div>
+          </div>
+          {% endfor %}
+        {% else %}
+          <p class="text-light">No comments yet. Be the first to write one!</p>
+        {% endif %}
+      </div>
+
+
+      {% if user.is_authenticated %}
+        <div class="glass-card mt-4">
+          <h5 class="mb-3">Leave a Comment</h5>
+          <form method="post">
+            {% csrf_token %}
+            <div class="mb-3 d-flex align-items-start">
+              {{ form.content.label_tag }}
+              {{ form.content|add_class:"form-control me-2" }}
+              <button type="button" id="emoji-btn" class="emoji-button" aria-expanded="false">😊</button>
+            </div>
+            <button type="submit" class="btn btn-purple">Post Comment</button>
+          </form>
+        </div>
+      {% else %}
+          <div class="login-prompt glass-card mt-4 text-center">
+             <p>
+               <a href="{% url 'login' %}" class="login-link">Log in</a> to write a comment.
+             </p>
+          </div>
+      {% endif %}
+
+      <div class="text-center mt-5">
+        <a href="{% url 'list-articol' %}" class="btn btn-outline-secondary">← Back to Feed</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@4.6.2/dist/index.min.js"></script>
+<script>
+  const button = document.querySelector('#emoji-btn');
+  if (button) {
+    const picker = new EmojiButton({
+      position: 'top-end',
+      theme: 'auto',
+      zIndex: 9999
+    });
+
+    picker.on('emoji', emoji => {
+      const input = document.querySelector('#id_content');
+      input.value += emoji;
+      input.focus();
+    });
+
+    button.addEventListener('click', () => {
+      picker.togglePicker(button);
+      // Toggle aria-expanded attribute for styling
+      let expanded = button.getAttribute('aria-expanded') === 'true';
+      button.setAttribute('aria-expanded', !expanded);
+    });
+  }
+</script>
+{% endblock %}

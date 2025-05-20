@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<style>
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #7b5acf, #b084f5);
+    color: #eee;
+    overflow-x: hidden;
+  }
+
+  .particles {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .particle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255 255 255 / 0.15);
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    opacity: 0.7;
+    filter: drop-shadow(0 0 4px rgba(255 255 255 / 0.6));
+  }
+  @keyframes floatUp {
+    0% { transform: translateY(100vh) scale(1); opacity: 0; }
+    10% { opacity: 0.6; }
+    100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+  }
+
+  .glass-card {
+    background: linear-gradient(145deg, #a890f7, #6546b0);
+    border-radius: 1.2rem;
+    padding: 40px 40px 50px;
+    max-width: 420px;
+    margin: 100px auto;
+    box-shadow:
+      0 0 40px #c5a6ff,
+      0 0 80px #8c54e1,
+      inset 0 0 80px #a77fff;
+    color: #f0e8ff;
+    user-select: none;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+    animation: fadeSlide 1s ease forwards;
+  }
+
+  h2 {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 1.5em;
+    letter-spacing: 0.05em;
+    text-shadow:
+      0 0 10px #d9bbff,
+      0 0 20px #a07fff,
+      0 0 40px #c6a5ff;
+  }
+
+  .form-glow input {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 12px;
+    border: none;
+    background: rgba(255 255 255 / 0.15);
+    color: #eee;
+    font-weight: 600;
+    font-size: 1rem;
+    box-shadow: inset 0 0 8px rgba(255 255 255 / 0.2);
+    margin-bottom: 20px;
+    transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+  }
+  .form-glow input::placeholder {
+    color: #d3c9ffcc;
+  }
+  .form-glow input:focus {
+    outline: none;
+    background: rgba(255 255 255 / 0.3);
+    box-shadow: 0 0 15px #b084f5;
+    transform: scale(1.03);
+  }
+
+  .btn-glass {
+    padding: 15px 50px;
+    background: linear-gradient(135deg, #a77fff, #6546b0);
+    border-radius: 30px;
+    border: none;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: #eee;
+    cursor: pointer;
+    box-shadow: 0 0 25px #b084f5;
+    transition: all 0.3s ease;
+  }
+  .btn-glass:hover {
+    background: linear-gradient(135deg, #b084f5, #7b5acf);
+    box-shadow:
+      0 0 50px #d8bbff,
+      0 0 80px #a166ff;
+    transform: scale(1.1);
+  }
+
+  @keyframes fadeSlide {
+    from {opacity: 0; transform: translateY(40px);}
+    to {opacity: 1; transform: translateY(0);}
+  }
+
+
+  @media (max-width: 460px) {
+    .glass-card {
+      margin: 60px 20px;
+      padding: 30px 20px 40px;
+    }
+    h2 {
+      font-size: 2.2rem;
+    }
+  }
+</style>
+
+<div class="particles" aria-hidden="true">
+  <div class="particle" style="width: 18px; height: 18px; left: 12%; animation: floatUp 30s linear infinite; animation-delay: 0s;"></div>
+  <div class="particle" style="width: 10px; height: 10px; left: 25%; animation: floatUp 27s linear infinite; animation-delay: 8s;"></div>
+  <div class="particle" style="width: 22px; height: 22px; left: 40%; animation: floatUp 33s linear infinite; animation-delay: 4s;"></div>
+  <div class="particle" style="width: 14px; height: 14px; left: 60%; animation: floatUp 35s linear infinite; animation-delay: 10s;"></div>
+  <div class="particle" style="width: 16px; height: 16px; left: 75%; animation: floatUp 28s linear infinite; animation-delay: 3s;"></div>
+  <div class="particle" style="width: 9px; height: 9px; left: 85%; animation: floatUp 25s linear infinite; animation-delay: 6s;"></div>
+</div>
+
+<div class="glass-card" role="main" aria-label="Login form container">
+  <h2>Login to BlogTube</h2>
+
+  <form method="post" novalidate>
+    {% csrf_token %}
+    <div class="form-glow">
+      {{ form.as_p }}
+    </div>
+    <button type="submit" class="btn-glass">Login</button>
+  </form>
+</div>
+{% endblock %}
